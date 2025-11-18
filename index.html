@@ -1,24 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pepsi Tet Golden Moment Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0"
-  }
-}
-</script>
+    <link rel="stylesheet" href="style.css">
 </head>
-  <body class="bg-[#001f40]">
-    <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
-  </body>
+<body class="bg-[#001f40]">
+
+    <div class="relative min-h-screen w-full flex justify-center items-start overflow-x-hidden p-4 sm:p-6 md:p-8 bg-gradient-to-b from-[#001f40] to-[#003366] text-white font-sans">
+        <main class="relative z-10 bg-black/40 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl max-w-4xl w-full my-8 border border-white/20">
+            
+            <header class="text-center">
+                <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-yellow-400 text-shadow-lg">
+                    Pepsi Tet Golden Moment Generator
+                </h1>
+                <p class="mt-2 text-base sm:text-lg text-gray-200">
+                    Create your family's unique Tet memory with a touch of magic.
+                </p>
+            </header>
+
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <!-- Uploader Column -->
+                <div class="bg-white/10 p-6 rounded-xl border border-white/30 h-full flex flex-col justify-between">
+                    <div>
+                        <label class="block text-lg font-semibold mb-2 text-gray-100">1. Upload Your Family Photo</label>
+                        <p class="text-sm text-gray-300 mb-4">Upload a JPG or PNG photo with at least two people for the best results.</p>
+                        <div class="mt-2 flex justify-center">
+                            <input
+                                type="file"
+                                id="image-uploader"
+                                accept=".jpg, .jpeg, .png"
+                                class="block w-full text-sm text-gray-300
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-full file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-yellow-400 file:text-[#001f40]
+                                    hover:file:bg-yellow-300
+                                    disabled:opacity-50 disabled:cursor-not-allowed"
+                            />
+                        </div>
+                    </div>
+                    <div id="image-preview-container" class="mt-4 w-full h-48 bg-black/20 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div id="image-preview-placeholder" class="text-center text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <p class="mt-1 text-sm">Image Preview</p>
+                        </div>
+                         <img id="image-preview" src="" alt="Uploaded preview" class="w-full h-full object-cover hidden" />
+                    </div>
+                </div>
+
+                <!-- Selector Column -->
+                <div class="bg-white/10 p-6 rounded-xl border border-white/30 h-full">
+                    <label for="lucky-letter-selector" class="block text-lg font-semibold mb-2 text-gray-100">2. Select a Lucky Letter</label>
+                    <p class="text-sm text-gray-300 mb-4">Each letter creates a unique Tet moment for your family.</p>
+                    <select 
+                        id="lucky-letter-selector"
+                        class="w-full p-3 border rounded-lg border-yellow-400 bg-[#001f40]/50 text-white text-lg focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                        style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffd700%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.3%203.2-16.1%208.1-3.8%204.9-4.7%2011-2.9%2016.5l133.7%20163.7c5.4%206.6%2015.6%206.6%2021%200l133.7-163.7c1.8-5.5.9-11.6-2.9-16.5z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 0.7em top 50%; background-size: 0.65em auto;"
+                    >
+                    </select>
+                    <div class="mt-4 p-4 bg-black/20 rounded-lg min-h-[6rem]">
+                        <p id="letter-description-label" class="font-semibold text-yellow-400"></p>
+                        <p id="letter-description-text" class="text-gray-200"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                 <button
+                    id="generate-button"
+                    disabled
+                    class="bg-yellow-400 text-[#001f40] px-8 py-4 rounded-full text-xl font-bold
+                           transition-all duration-300 ease-in-out
+                           hover:bg-yellow-300 hover:shadow-lg hover:shadow-yellow-400/50 hover:scale-105
+                           active:scale-95
+                           disabled:bg-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none
+                           flex items-center justify-center min-w-[280px] mx-auto"
+                >
+                    <span id="button-text">Generate My Tet Moment!</span>
+                    <div id="button-spinner" class="hidden border-4 border-t-4 border-gray-200 border-t-yellow-400 rounded-full w-6 h-6 animate-spin"></div>
+                    <span id="button-loading-text" class="hidden ml-3">Generating Your Moment...</span>
+                </button>
+            </div>
+            
+            <div id="error-message" class="hidden mt-6 p-4 bg-red-500/20 border border-red-500 text-red-300 rounded-lg text-center"></div>
+
+            <div class="mt-10">
+                <div id="image-display" class="bg-[#002a52] p-4 rounded-2xl border-2 border-yellow-400 min-h-[300px] sm:min-h-[400px] md:min-h-[500px] flex justify-center items-center relative overflow-hidden shadow-inner shadow-black/50">
+                   <div class="absolute inset-2 border-2 border-yellow-400/70 rounded-lg pointer-events-none"></div>
+                   
+                   <div id="image-display-placeholder" class="text-center text-gray-400">
+                      <p class="text-lg">Your generated image will appear here.</p>
+                   </div>
+
+                   <div id="image-display-loading" class="hidden text-center text-yellow-400">
+                       <div class="border-4 border-t-4 border-gray-200 border-t-yellow-400 rounded-full w-8 h-8 animate-spin mx-auto"></div>
+                       <p class="mt-4 text-lg font-semibold animate-pulse">Your special moment is being created...</p>
+                       <p class="mt-2 text-sm text-gray-300">This can take a moment, please wait.</p>
+                   </div>
+                   
+                   <img id="generated-image" src="" class="hidden max-w-full max-h-full h-auto w-auto object-contain rounded-lg shadow-2xl" alt="Generated Tet Moment" />
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
 </html>
